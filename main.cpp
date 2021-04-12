@@ -471,23 +471,49 @@ int Angajat::luna_curenta, Angajat::an_curent;
 int main() {
     Angajat::init_an_luna(2021, 4);
     int opt, n, i,tip_angajat;
-    Angajat *angajati;
+    
     float prima_firma;
     cout << "PRIMA FIRMEI ESTE =";
     cin >> prima_firma;
-    fin >> n;
+    //fin >> n;
+    n=1;
     cout<<"Acum se citesc cei "<<n<<" angajati din fisier. Va rugam asteptati...";
-    angajati = new Angajat[n];
+    // nu te lasa sa faci asta pt ca e clasa abstracta si 
+    //tu cand faci new Angajat[n] practic instantiezi de n ori 
+    // clasa Angajat ceea ce nu ai voie sa faci pe o clasa abstracta
+    // trebuie sa faci un vector de pointeri ( ca tu practic sa faci upcasting )
+    Angajat *angajati[n]; //declar un vector de pointeri catre Angajat nu de obiecte(instante angajat)
     for(i=1;i<=n;i++)
     {
-        fin>>tip_angajat;//aici trebuie sa citesc angajati in general ori de tip part time ori de tip permanent si nu stiu cum sa citesc.
+        //PS1: nu ai treaba cu downcasting-ul la citire 
+        //Recomad: Pentru un mai bun control al erorilor pana il definitivezi 
+        //sa lasi citirea datelor de la tastatura nu din fisier
+        // PS2: eu n-am reusit sa-ti verific citirea din cauza fisierului insa de compilat compileaza
+        // de aceea e possibil sa mai ai probelme la citire pe care eu sa nu le pot vedea
+        
+        //downcastingul se foloseste cand vrei sa treci de la un pointer
+        // de tipul clasei de baza la ceva de tipul derivat 
+        //o sa lucrezi cu downcastingul cred ca la tema urmatoare cand o sa ai 
+        //niste metode suprascrise si vei avea nevoie sa le accesezi 
+        //pe cele din clasa derivata nu din clasa de baza
+        
+        Angajat *angajat; // vectorul tau are pointeri de tip angajat pe care se face upcasting
+        //fin>>tip_angajat;//aici trebuie sa citesc angajati in general ori de tip part time ori de tip permanent si nu stiu cum sa citesc.
+        cin>>tip_angajat;
         if(tip_angajat==1)//inseamna ca angajatul citit e de tip part time
         {
-            //nimic
+           angajat =new Part_Time(); // echivalent cu Angajat * angajat = new Part_Time ();
+            cin>>(*angajat); //practic tu aici citesti obiectul catre care pointeaza *angajat
+            // de aceea am pus * ca tu vrei sa scrii in memorie 
+            // pointerul tau e doar o adresa catre acea zona de memorie
+            // pe care tu vrei sa o accesezi la scriere
+            // de aceea (*p) iti acceseaza zona de memorie pe care o "arata" p 
         }
         if(tip_angajat==2)//inseamna ca angajatul citit e de tip permanent
         {
             //nimic
+            angajat =new Permanent();
+            cin>>(*angajat);
 
         }
     }
